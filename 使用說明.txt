@@ -1,0 +1,4 @@
+ -- 目前版本 beta v1.0
+ -- 使用方法，點擊 index.html 即可開始使用
+ -- 網頁內有Setting頁面可以自行編輯Overview頁面的內容
+ -- 本工具使用數據與圖表工具皆來自TradingView
