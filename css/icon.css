@@ -1,7 +1,7 @@
 .icon-size {
-    
-    height: 20px;
-    width: 20px;
+
+    height: 30px;
+    width: 30px;
     display: block;
     /* Other styles here */
 }
@@ -10,4 +10,11 @@
     
     border-radius: 10px;
     /* Other styles here */
+}
+
+.icon-background-white{
+	background-color: #FFFFFF;
+	padding: 2px;
+	border-radius: 10px;
+	
 }
