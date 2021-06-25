@@ -1,7 +1,13 @@
-.iconBinance {
-    background: url('../img/binance.png');
+.icon-size {
+    
     height: 20px;
     width: 20px;
     display: block;
+    /* Other styles here */
+}
+
+.icon-radius {
+    
+    border-radius: 10px;
     /* Other styles here */
 }
