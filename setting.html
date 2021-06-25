@@ -73,7 +73,11 @@
 							<div class="col-12">
                                 <font size="1">代號查詢方式 -> <a href="settingTeach.html">點此</a></font>
                             </div>
-                            <div class="col-12">
+                            
+							<div class="col-12 text-end">
+								<button type="button" class="btn btn-danger" onclick='reset()'>恢復預設值</button>
+							</div>
+							<div class="col-12">
                                 <hr/>
                             </div>
 							
@@ -473,6 +477,42 @@
 					width: "100px"
                 },{ command: ["destroy"], title: "&nbsp;", width: "55px" }]
             });
+		}
+		
+		
+		function reset(){
+		
+			Swal.fire({
+			  title: '是否要恢復預設值?',
+			  text: "恢復預設值後，將刪除你所有個人化設定",
+			  icon: 'warning',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: '是的！我要恢復預設值',
+			  cancelButtonText: '取消'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+				  localStorage.clear();
+				  Swal.fire({
+					  title: '恢復預設值成功！',
+					  text:'您的資料已恢復為初始設定(3秒後自動重新整理)',
+					  icon: 'success',
+					  allowEscapeKey :false,
+					  allowOutsideClick : false,
+					  allowEnterKey: false,
+					  showConfirmButton: false
+					});
+					
+					setTimeout(
+					  function() 
+					  {
+						location.reload();
+					  }, 3000);
+				  
+				  
+			  }
+			})
 		}
 	</script>
     </body>
