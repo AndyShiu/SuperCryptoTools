@@ -1,3 +1,4 @@
+var remoteIpAddress='http://localhost:8080'
 var mdDefData = 
 [                                         
   {                                       
@@ -143,4 +144,16 @@ var marketListData =
 	  "name": "BINANCE:MATICUSDT",
 	  "displayName": "MATIC/USDT"
 	}
+];
+
+var symbolsData=[
+	{
+		"symbol":"BTCUSDT"
+	},
+	{
+		"symbol":"ETHUSDT"
+	},
+	{
+		"symbol":"BNBUSDT"
+	},
 ];

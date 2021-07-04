@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title>SuperCryptoTools(beta 1.0)</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+		<link href="css/icon.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common.min.css" />
+		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<!-- include BlockUI -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">SuperCryptoTools</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            
+            
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+               
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">功能</div>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/speedometer.png"/></div>
+                                儀表板
+                            </a>
+							
+							<a class="nav-link" href="rates.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/money.png"/></div>
+                                法幣匯率
+                            </a>
+							
+							<a class="nav-link" href="setting.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/settings.png"/></div>
+                                個人化設定
+                            </a>
+							
+							<a class="nav-link" href="feedback.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/feedback.png"/></div>
+                                意見回饋
+                            </a>
+							<div class="sb-sidenav-menu-heading">快速連結</div>
+							<a class="nav-link" target="_blank" href="https://www.binance.com/zh-TW">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size" src="./img/binance.png"/></div>
+                                幣安
+                            </a>
+							<a class="nav-link" target="_blank" href="https://ftx.com/">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size" src="./img/ftx.png"/></div>
+                                FTX
+                            </a>
+							<a class="nav-link" target="_blank" href="https://supercforcrypto.firstory.io/">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-radius" src="./img/superc.jpg"/></div>
+                                <font size ='2'>SuperC - 克洛伊小姐</font>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">資料與圖表來源:</div>
+						<h3>TradingView</h3>               
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">幣安現貨P&L</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">查看幣安現貨歷史成交紀錄與損益</li>
+                        </ol>
+                        <div class="row">
+                            <div class="col-12">
+                                <hr/>
+                            </div>
+							
+                        </div>
+						
+                        <div class="row">
+                            <div class="col-xl-12">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        設定&nbsp;&nbsp;<button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font id='hideShowButText'>隱藏</font></button>
+                                    </div>
+                                    <div id='settingDiv' class="card-body">
+										<div class="row">
+											<div class="col-12">
+												幣安API參數設定
+											</div>
+											<div class="col-12">
+												<div class="input-group input-group-sm mb-3">
+												  <div class="input-group-prepend">
+													<span class="input-group-text" id="inputGroup-sizing-sm">API-KEY</span>
+												  </div>
+												  <input type="text" id="akey_input" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+												</div>
+											</div>
+											<div class="col-12">
+												<div class="input-group input-group-sm mb-3">
+												  <div class="input-group-prepend">
+													<span class="input-group-text" id="inputGroup-sizing-sm">Secret-KEY</span>
+												  </div>
+												  <input type="text" id="skey_input" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+												</div>
+											</div>
+											<div class="col-12">
+												<button  type="button" class="btn btn-dark" onclick='saveKey()'>儲存</button>
+											</div>
+											<div class="col-12">
+												<hr/>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12">
+												交易對設定
+											</div>
+											<div class="col-12">
+												<div id="symbol-grid"></div>
+											</div>
+											
+										</div>
+										
+									</div>
+                                </div>
+                            </div>
+                           
+                        </div>
+						
+						
+						
+						
+                        <div class="row">
+                            <div class="col-12">
+                                <hr/>
+                            </div>
+							<div class="col-12 text-end">
+								<button type="button" class="btn btn-danger" onclick='loadHis()'>讀取交易紀錄</button>
+							</div>
+							<div class="col-12">
+								<div id='grid'></div>
+							</div>
+                        </div>
+						
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; AndyShiu 2021 ‧ <a href="https://github.com/AndyShiu/SuperCryptoTools">Github</a> </div>
+                            
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+		<script src="js/data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+		<script>
+		
+		var global = [];
+
+        $(document).ready(function () {
+			global.isSetShow=true;
+			
+			getSymbolData();
+			initSymbolGrid();
+			hideShowSet();
+			
+			getUserKey();
+			getHis();
+			initGrid();
+        });
+		function getHis(){
+			global.hisData = JSON.parse(window.localStorage.getItem("HisData"));
+		
+		}
+		function initGrid(){
+			global.dataGrid = 
+			$("#grid").kendoGrid({
+                dataSource: {
+                    type: "json",
+                    data: global.hisData,
+                    pageSize: 20
+                    
+                },
+                height: 550,
+				
+				
+				
+                pageable: {
+                    
+                },
+                columns: [{
+                    field: "symbol",
+                    title: "交易對",
+					width: "25px"
+                },{
+                    field: "cost",
+                    title: "購買成本",
+					width: "100px"
+                },{
+                    field: "income",
+                    title: "已成交收入",
+					width: "100px"
+                },{
+                    field: "profit",
+                    title: "已實現損益",
+					width: "100px"
+                }]
+            });
+		}
+		
+		function saveKey(){
+			window.localStorage.setItem("akey",$('#akey_input').val());	
+			window.localStorage.setItem("skey",$('#skey_input').val());	
+			Swal.fire(
+					  '儲存成功!',
+					  '資料儲存成功!',
+					  'success'
+					)
+		}
+		
+		function getUserKey(){
+			global.akey = window.localStorage.getItem("akey");
+			global.skey = window.localStorage.getItem("skey");
+			
+			if(global.akey == null || global.skey == null){
+				hideShowSet();
+				Swal.fire({
+					  title:'尚未設定',
+					  text: '請先設定API-KEY與Secret-KEY',
+					  icon: 'warning'
+					});
+			}else{
+				$('#akey_input').val(global.akey);
+				$('#skey_input').val(global.skey);
+			}
+		}
+		
+		function getSymbolData(){
+			global.symbolsData = JSON.parse(window.localStorage.getItem("SymbolsData"));
+			
+			if(global.symbolsData==null){
+				global.symbolsData = symbolsData;
+			}
+		}
+		
+		function initSymbolGrid(){
+			global.sdGrid = 
+			$("#symbol-grid").kendoGrid({
+                dataSource: {
+                    type: "json",
+                    data: global.symbolsData,
+                    pageSize: 20,
+					schema: {
+                        model: {
+                            id: "proName",
+                            fields: {
+                                order: { type: "number", validation: { required: true } },
+                                description: { validation: { required: true } },
+                                proName: { validation: { required: true} } 
+							}
+                        }
+                    }
+                    
+                },
+				toolbar: [	
+							{ name: "create" },
+							{ name: "save" },
+							{ name: "cancel" }
+						 ],
+                height: 250,
+				editable: true,
+				confirmation: false,
+			    saveChanges: function(e) {
+				  //if (!confirm("Are you sure you want to save all changes?")) {
+				     //e.preventDefault();
+				  //}else{
+					//window.localStorage.setItem("MarDomData",JSON.stringify($("#market-dominance-grid").data("kendoGrid").dataSource.data()));	
+					//console.log(JSON.parse(JSON.stringify($("#market-dominance-grid").data("kendoGrid").dataSource.data())));
+				  //}
+				  
+				  $("#symbol-grid").data("kendoGrid").dataSource.data().sort(function(a, b) {
+						if (true) {
+							return (a['order'] > b['order']) ? 1 : ((a['order'] < b['order']) ? -1 : 0);
+						} else {
+							return (b['order'] > a['order']) ? 1 : ((b['order'] < a['order']) ? -1 : 0);
+						}
+					});
+				  
+				  window.localStorage.setItem("SymbolsData",JSON.stringify($("#symbol-grid").data("kendoGrid").dataSource.data()));	
+				  getSymbolData();
+				  Swal.fire(
+					  '儲存成功!',
+					  '資料儲存成功!',
+					  'success'
+					)
+			    },
+				
+                pageable: {
+                    
+                },
+                columns: [{
+                    field: "order",
+                    title: "順序",
+					width: "25px"
+                },{
+                    field: "symbol",
+                    title: "交易對",
+					width: "100px"
+                },{ command: ["destroy"], title: "&nbsp;", width: "55px" }]
+            });
+			
+			
+		}
+		
+		
+		function loadHis(){
+			
+			var count = 0;
+			var delay = 500;
+			global.hisData = [];
+			var dataLength =global.symbolsData.length;
+			$.blockUI({ message: '<h1>資料讀取中(<font id="pcount">0</font>/'+dataLength+')</h1>' });
+			$.each(global.symbolsData, function(key,value) {
+				setTimeout(function(){
+					$.ajax({ 
+						type: "get",  
+						url: remoteIpAddress+'/api/pAndl/binance?apiKey='+global.akey+'&SecretKey='+global.skey+'&symbol='+value.symbol, 
+						async: false,
+						success: function(data){
+							if(data.code=='0'){
+								global.hisData.push(data.obj);
+							}
+							
+							console.log(dataLength);
+							console.log(count);
+							if(dataLength==(count+1)){
+								console.log(global.hisData);
+								window.localStorage.setItem("HisData",JSON.stringify(global.hisData));	
+								
+								var dataSource = new kendo.data.DataSource({
+								  data: global.hisData
+								});
+								var grid = $("#grid").data("kendoGrid");
+								grid.setDataSource(dataSource);
+								
+								
+								$.unblockUI();
+								//grid.refresh();
+							}
+							count ++;
+							$('#pcount').text(''+count);
+						}
+					});
+				},delay);
+				delay += 500;
+				
+				
+				
+			});
+			
+			
+		}
+		
+		
+		function hideShowSet(){
+		if(global.isSetShow){
+			$('#settingDiv').hide();
+			global.isSetShow = false;
+			$('#hideShowButText').text('顯示');
+		}else{
+			$('#settingDiv').show();
+			global.isSetShow = true;
+			$('#hideShowButText').text('隱藏');
+		}
+			
+		}
+			
+	</script>
+    </body>
+</html>
