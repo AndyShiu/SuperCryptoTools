@@ -11,13 +11,16 @@
         <link href="css/styles.css" rel="stylesheet" />
 		<link href="css/icon.css" rel="stylesheet" />
 		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common.min.css" />
-		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css" />
+		<!--<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css" />-->
+		<link rel="stylesheet" href="css/kendo.custom.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
+		<script src="https://kendo.cdn.telerik.com/2021.2.616/js/messages/kendo.messages.zh-TW.min.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<!-- include BlockUI -->
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+		
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -84,23 +87,30 @@
                         <h1 class="mt-4">幣安現貨P&L</h1>
                         <ol class="breadcrumb mb-4">
                             <li class="breadcrumb-item active">查看幣安現貨歷史成交紀錄與損益</li>
+							
                         </ol>
                         <div class="row">
-                            <div class="col-12">
-                                <hr/>
+							 <div class="col-12">
+                               <button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font id='hideShowButText'>隱藏設定</font></button>
                             </div>
+							
+                           
 							
                         </div>
 						
-                        <div class="row">
+                        <div id='settingDiv' class="row">
+							<div class="col-12">
+                                <hr/>
+                            </div>
                             <div class="col-xl-12">
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        設定&nbsp;&nbsp;<button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font id='hideShowButText'>隱藏</font></button>
+                                        設定&nbsp;&nbsp;
                                     </div>
-                                    <div id='settingDiv' class="card-body">
-										<div class="row">
+                                    <div  class="card-body">
+										<div class="row"> 
+											 
 											<div class="col-12">
 												幣安API參數設定
 											</div>
@@ -154,8 +164,19 @@
 								<button type="button" class="btn btn-danger" onclick='loadHis()'>讀取交易紀錄</button>
 							</div>
 							<div class="col-12">
+                                <br/>
+                            </div>
+							<div class="col-12">
+								<div id='balance-grid'></div>
+							</div>
+							
+							<div class="col-12">
+                                <br/>
+                            </div>
+							<div class="col-12">
 								<div id='grid'></div>
 							</div>
+							
                         </div>
 						
                     </div>
@@ -188,7 +209,79 @@
 			getUserKey();
 			getHis();
 			initGrid();
+			getUserBalance();
+			initBalanceGrid();
         });
+		
+		function getUserBalance(){
+			global.blData = JSON.parse(window.localStorage.getItem("BalanceData"));
+		
+		}
+		
+		function initBalanceGrid(){
+			global.blGrid = 
+			$("#balance-grid").kendoGrid({
+                dataSource: {
+                    type: "json",
+                    data: global.blData.detail,
+                    pageSize: 20
+                    
+                },
+				
+				
+				
+                pageable: {
+                    
+                },
+                columns: [
+					{
+						field: "asset",
+						title: "交易對",
+						width: "100px"
+					},{
+						field: "price",
+						template:"#=price# USDT",
+						attributes: {
+						  "class": "table-cell",
+						  style: "text-align: right;"
+						},
+						title: "單價",
+						width: "100px"
+					},{
+						field: "free",
+						title: "可運用",
+						attributes: {
+						  "class": "table-cell",
+						  style: "text-align: right;"
+						},
+						width: "100px"
+					},{
+						field: "locked",
+						attributes: {
+						  "class": "table-cell",
+						  style: "text-align: right;"
+						},
+						title: "鎖定",
+						width: "100px"
+					},{
+						field: "totalPrice",
+						template:"#=totalPrice# USDT",
+						attributes: {
+						  "class": "table-cell",
+						  style: "text-align: right;"
+						},
+						title: "總價",
+						width: "100px"
+					},{ 
+						field: "updDateTime", 
+						title:"最後更新時間", 
+						width: "100px" 
+					}
+				]
+            });
+		
+		}
+		
 		function getHis(){
 			global.hisData = JSON.parse(window.localStorage.getItem("HisData"));
 		
@@ -202,30 +295,122 @@
                     pageSize: 20
                     
                 },
-                height: 550,
-				
-				
-				
+				resizable: true,
+				detailTemplate: '歷史紀錄: <div class="grid"></div>',
+				detailInit: function(e) {
+					e.detailRow.find(".grid").kendoGrid({
+						dataSource: 
+						{
+							type: "json",
+							data: e.data.detail,
+							pageSize: 10
+							
+						},						
+						scrollable: false,
+						sortable: true,
+						resizable: true,
+						pageable: {
+                    
+						},
+						columns: [
+							{ 
+								field: "dateTimeStr", 
+								title:"交易日期", 
+								width: "150px" 
+							},
+							{ 
+								field: "isBuyer", 
+								title: "買/賣",
+								template:"#if(isBuyer){#<font color='green'>買</font>#}else{#<font color='red'>賣</font>#}#", 
+								width: "50px" 
+							},
+							{ 
+								field: "price", 
+								title:"單價",
+								template:"#=price# USDT",
+								attributes: {
+								  "class": "table-cell",
+								  style: "text-align: right;"
+								},								
+								width: "200px" 
+							},
+							{ 
+								field: "qty", 
+								title:"數量", 
+								attributes: {
+								  "class": "table-cell",
+								  style: "text-align: right;"
+								},
+								width: "200px" 
+							},
+							{ 
+								field: "quoteQty", 
+								title: "成交金額", 
+								template:"#=quoteQty# USDT",
+								attributes: {
+								  "class": "table-cell",
+								  style: "text-align: right;"
+								},
+								width: "300px" 
+							},
+							{ 
+								field: "commission", 
+								title: "手續費", 
+								template:"#=commission# #=commissionAsset#",
+								attributes: {
+								  "class": "table-cell",
+								  style: "text-align: right;"
+								},
+								width: "200px" 
+							},
+							
+						]
+					});
+				  },
                 pageable: {
                     
                 },
                 columns: [{
                     field: "symbol",
                     title: "交易對",
-					width: "25px"
+					width: "100px"
                 },{
                     field: "cost",
                     title: "購買成本",
+					template:"#=cost# USDT",
+					attributes: {
+					  "class": "table-cell",
+					  style: "text-align: right;"
+					},
 					width: "100px"
                 },{
                     field: "income",
                     title: "已成交收入",
+					template:"#=income# USDT",
+					attributes: {
+					  "class": "table-cell",
+					  style: "text-align: right;"
+					},
 					width: "100px"
                 },{
                     field: "profit",
                     title: "已實現損益",
+					template:"#=profit# USDT",
+					attributes: {
+					  "class": "table-cell",
+					  style: "text-align: right;"
+					},
 					width: "100px"
-                }]
+                },{
+				    field: "dataSize",
+                    title: "交易資料數量",
+					attributes: {
+					  "class": "table-cell",
+					  style: "text-align: right;"
+					},
+					width: "100px"
+				
+				}]
             });
 		}
 		
@@ -237,6 +422,7 @@
 					  '資料儲存成功!',
 					  'success'
 					)
+			getUserKey();
 		}
 		
 		function getUserKey(){
@@ -363,7 +549,7 @@
 								});
 								var grid = $("#grid").data("kendoGrid");
 								grid.setDataSource(dataSource);
-								
+								getUserBalanceByAPI();
 								
 								$.unblockUI();
 								//grid.refresh();
@@ -382,17 +568,37 @@
 			
 		}
 		
+		function getUserBalanceByAPI(){
+			$.ajax({ 
+				type: "get",  
+				url: remoteIpAddress+'/api/balance/binance?apiKey='+global.akey+'&SecretKey='+global.skey, 
+				async: false,
+				success: function(data){
+					if(data.code=='0'){
+						window.localStorage.setItem("BalanceData",JSON.stringify(data.obj));	
+					}
+					
+					console.log(data);
+					getUserBalance();
+					var dataSource = new kendo.data.DataSource({
+								  data: global.blData.detail
+								});
+					var grid = $("#balance-grid").data("kendoGrid");
+								grid.setDataSource(dataSource);
+				}
+			});
+		}
 		
 		function hideShowSet(){
-		if(global.isSetShow){
-			$('#settingDiv').hide();
-			global.isSetShow = false;
-			$('#hideShowButText').text('顯示');
-		}else{
-			$('#settingDiv').show();
-			global.isSetShow = true;
-			$('#hideShowButText').text('隱藏');
-		}
+			if(global.isSetShow){
+				$('#settingDiv').hide();
+				global.isSetShow = false;
+				$('#hideShowButText').text('顯示設定');
+			}else{
+				$('#settingDiv').show();
+				global.isSetShow = true;
+				$('#hideShowButText').text('隱藏設定');
+			}
 			
 		}
 			
