@@ -703,11 +703,32 @@
 			});
 			profit = blprofit.add(hisprofit);
 			
+			if(profit.compareTo( new bigDecimal('0'))<0){
+				$('#profit').css('color', 'red');
+			}else{
+				$('#profit').css('color', 'green');
+			}
+			
+			if(blprofit.compareTo( new bigDecimal('0'))<0){
+				$('#blprofit').css('color', 'red');
+			}else{
+				$('#blprofit').css('color', 'green');
+			}
+			
+			if(hisprofit.compareTo( new bigDecimal('0'))<0){
+				$('#hisprofit').css('color', 'red');
+			}else{
+				$('#hisprofit').css('color', 'green');
+			}
+			
 			$('#profit').text(profit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
 			$('#blprofit').text(blprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
 			$('#hisprofit').text(hisprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
 		
 		}
+		
+		
+		
 			
 	</script>
     </body>
