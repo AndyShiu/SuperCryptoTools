@@ -91,15 +91,7 @@
                             <li class="breadcrumb-item active">查看幣安現貨歷史成交紀錄與損益</li>
 							
                         </ol>
-                        <div class="row">
-							 <div class="col-12">
-                               <button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font id='hideShowButText'>隱藏設定</font></button>
-                            </div>
-							
-                           
-							
-                        </div>
-						
+                      
                         <div id='settingDiv' class="row">
 							<div class="col-12">
                                 <hr/>
@@ -141,7 +133,7 @@
 										</div>
 										<div class="row">
 											<div class="col-12">
-												交易對設定
+												交易歷史紀錄 - 交易對設定
 											</div>
 											<div class="col-12">
 												<div id="symbol-grid"></div>
@@ -159,14 +151,94 @@
 						
 						
                         <div class="row">
+						
+							<div class="col-12">
+								<div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        P&L 損益總覽
+                                    </div>
+                                    <div class="card-body">
+										<div class="row">
+											<div class="col-4">
+												<div class="row align-items-center">
+													<div class="col-5 ">
+														<font>總損益</font>
+													</div>
+													<div class="col-7">
+														<font size='5' id='profit'>0</font> <font size='4'>USDT</font>
+													</div>
+													
+												</div>
+												<div class="row align-items-center">
+													<div class="col-12">
+														<hr/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12 text-center">
+														<font size = '2'>(總損益 = 現貨價值 + 交易損益)</font>
+													</div>
+												</div>
+												
+											</div>
+											<div class="col-4">
+												<div class="row align-items-center">
+													<div class="col-5 ">
+														<font>現貨價值</font>
+													</div>
+													<div class="col-7 ">
+														<font size='5' id='blprofit'>0</font> <font size='4'>USDT</font>
+													</div>
+												</div>
+												<div class="row align-items-center">
+													<div class="col-12">
+														<hr/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12 text-center">
+														<font size = '2'>(現貨價值 = 幣安帳戶內所有現貨之價值)</font>
+													</div>
+												</div>
+											</div>
+											<div class="col-4">
+												<div class="row align-items-center">
+													<div class="col-5 ">
+														<font>交易損益</font>
+													</div>
+													<div class="col-7 ">
+														<font size='5' id='hisprofit'>0</font> <font size='4'>USDT</font>
+													</div>
+												</div>
+												<div class="row align-items-center">
+													<div class="col-12">
+														<hr/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12 text-center">
+														<font size = '2'>(交易損益 = 成交收益 - 購入成本)</font>
+													</div>
+												</div>
+											</div>
+										</div>
+										
+										
+									</div>
+                                </div>
+							</div>
                             <div class="col-12">
                                 <hr/>
                             </div>
 							<div class="col-12 text-end">
-								<button type="button" class="btn btn-danger" onclick='loadHis()'>讀取交易紀錄</button>
+								<button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font id='hideShowButText'>隱藏設定</font></button> <button type="button" class="btn btn-danger" onclick='loadHis()'>讀取交易紀錄</button>
 							</div>
 							<div class="col-12">
                                 <br/>
+                            </div>
+							<div class="col-12">
+                                <font size = '4'>現貨</font>
                             </div>
 							<div class="col-12">
 								<div id='balance-grid'></div>
@@ -174,6 +246,9 @@
 							
 							<div class="col-12">
                                 <br/>
+                            </div>
+							<div class="col-12">
+                                <font size = '4'>交易歷史紀錄</font>
                             </div>
 							<div class="col-12">
 								<div id='grid'></div>
@@ -213,6 +288,8 @@
 			initGrid();
 			getUserBalance();
 			initBalanceGrid();
+			
+			countProfit();
         });
 		
 		function getUserBalance(){
@@ -476,7 +553,7 @@
 							{ name: "save" },
 							{ name: "cancel" }
 						 ],
-                height: 250,
+                
 				editable: true,
 				confirmation: false,
 			    saveChanges: function(e) {
@@ -502,6 +579,7 @@
 					  '資料儲存成功!',
 					  'success'
 					)
+					hideShowSet();
 			    },
 				
                 pageable: {
@@ -587,6 +665,8 @@
 								});
 					var grid = $("#balance-grid").data("kendoGrid");
 								grid.setDataSource(dataSource);
+								
+					countProfit();
 				}
 			});
 		}
@@ -602,6 +682,31 @@
 				$('#hideShowButText').text('隱藏設定');
 			}
 			
+		}
+		
+		function countProfit(){
+			var blData = global.blData.detail;
+			var hisData = global.hisData;
+			console.log(blData);
+			console.log(hisData);
+			var hisprofit = new bigDecimal('0');
+			var blprofit = new bigDecimal('0');
+			var profit = new bigDecimal('0');
+			$.each(blData, function(key,value) {
+				var b = new bigDecimal(value.totalPrice);
+				blprofit = blprofit.add(b);
+			});
+			
+			$.each(hisData, function(key,value) {
+				var b = new bigDecimal(value.profit);
+				hisprofit = hisprofit.add(b);
+			});
+			profit = blprofit.add(hisprofit);
+			
+			$('#profit').text(profit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
+			$('#blprofit').text(blprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
+			$('#hisprofit').text(hisprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
+		
 		}
 			
 	</script>
