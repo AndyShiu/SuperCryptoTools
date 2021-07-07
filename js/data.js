@@ -1,4 +1,4 @@
-var remoteIpAddress='http://localhost:8080'
+var remoteIpAddress='http://35.206.246.81:8080'
 var mdDefData = 
 [                                         
   {                                       
