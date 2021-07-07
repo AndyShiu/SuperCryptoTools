@@ -6,7 +6,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>SuperCryptoTools(beta 1.0)</title>
+
+        <title>SuperCryptoTools(v 1.2)</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
 		<link href="css/icon.css" rel="stylesheet" />
@@ -61,6 +62,11 @@
 							<a class="nav-link" href="feedback.html">
                                 <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/feedback.png"/></div>
                                 意見回饋
+                            </a>
+							<div class="sb-sidenav-menu-heading">進階功能</div>
+							<a class="nav-link"  href="binanceTradeHis.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size" src="./img/binance.png"/></div>
+                                幣安現貨損益(P&L)
                             </a>
 							<div class="sb-sidenav-menu-heading">快速連結</div>
 							<a class="nav-link" target="_blank" href="https://www.binance.com/zh-TW">
@@ -514,7 +520,11 @@
 			  cancelButtonText: '取消'
 			}).then((result) => {
 			  if (result.isConfirmed) {
-				  localStorage.clear();
+				  //localStorage.clear();
+				  localStorage.removeItem('MarDomData');
+					localStorage.removeItem('MarqueeData');
+					localStorage.removeItem('MarketImgData');
+					localStorage.removeItem('MarketListData');
 				  Swal.fire({
 					  title: '恢復預設值成功！',
 					  text:'您的資料已恢復為初始設定(3秒後自動重新整理)',
