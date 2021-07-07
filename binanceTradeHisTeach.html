@@ -11,12 +11,13 @@
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
 		<link href="css/icon.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common.min.css" />
+		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-		<script src="js/data.js"></script>
+		<script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 		<script data-ad-client="ca-pub-2341732219377974" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-
-
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -85,55 +86,48 @@
             <div id="layoutSidenav_content">
                 <main>
                     <div class="container-fluid px-4">
-                        <h1 class="mt-4">儀表板</h1>
+                        <h1 class="mt-4">Teaching</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item active">交易對/行情/市場 總覽儀表板</li>
+                            <li class="breadcrumb-item active">教學</li>
                         </ol>
+                        <div class="row">
+                            <div class="col-12">
+                                <hr/>
+                            </div>
+							
+                        </div>
 						
                         <div class="row">
-							<div class="col-12">
-								市值/優勢指數
-							</div>
-                            <div id='md-div' class="col-12">
-                                
+                            <div class="col-xl-12">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        幣安API-KEY 與 Secret-KEY產生方式
+                                    </div>
+                                    <div class="card-body">
+										1. 先至<a href="https://www.binance.com/zh-TW" target="_blank">https://www.binance.com</a>，並且登入<br/><br/>
+										2. 點選右上方人像圖示，在點選 API管理(如下圖)<br/>
+										<img  class="img-fluid" src="./img/teaching_2-1.jpg"/><br/><br/>
+										3. 於API管理頁面新增一個API授權，於輸入框內輸入一個你可以識別的API名稱，然後點選右方 "創建新API" 按鈕(如下圖)<br/>
+										<img  class="img-fluid" src="./img/teaching_2-2.jpg"/><br/><br/>
+										4. 此時系統會要求您重新做安全驗證，驗證內容可能依不同帳號設定有所不同(如下圖)<br/>
+										<img  class="img-fluid" src="./img/teaching_2-3.jpg"/><br/><br/>
+										5. 於下方API列表中就可以看到API-KEY 與 Secret-KEY，並將它們複製下來輸入到本站對應的輸入欄位內。(如下圖)<br/>
+										<img  class="img-fluid" src="./img/teaching_2-4.jpg"/><br/><br/>
+									</div>
+                                </div>
                             </div>
-							<div class="col-12">
-								價格跑馬燈
-							</div>
-							<div id='marquee-div' class="col-12">
-								
-							</div>
+                           
                         </div>
-						<div class="row">
-							<div class="col-12">
-							<ins class="adsbygoogle"
-								 style="display:block"
-								 data-ad-format="fluid"
-								 data-ad-layout-key="-gw-3+1f-3d+2z"
-								 data-ad-client="ca-pub-2341732219377974"
-								 data-ad-slot="8857065314"></ins>
-							<script>
-								 (adsbygoogle = window.adsbygoogle || []).push({});
-							</script>
-							</div>
-                        </div>
+						
+						
+						
+						
                         <div class="row">
-							<div class="col-12">
-								市場即時圖表
-							</div>
-                            <div class="col-12" >
-								<div id = 'marketImg' class="row">
-								</div>
-							</div>
-                        </div>
-                        <div class="card mb-4">
-                            <div class="card-header">
-                                <i class="fas fa-table me-1"></i>
-                                市場數據
+                            <div class="col-12">
+                                <hr/>
                             </div>
-                            <div id='marketList' class="card-body">
-                                
-                            </div>
+							
                         </div>
                     </div>
                 </main>
@@ -149,33 +143,19 @@
         </div>
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
         <script src="js/scripts.js"></script>
+		<script src="js/data.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-		
-		<script src="js/core-gen.js"></script>
-		
-		<script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
-		
 		<script>
-			$(document).ready(function(){
-				initMdDiv();
-				initMarqueeDiv();
-				initMarketImgDiv();
-				initMarketListDiv();
-			});
-			function initMarqueeDiv(){
-				$('#marquee-div').html(getMarqueeCode());
-			}
-			function initMdDiv(){
-				$('#md-div').html(getMDCode());
-			}
-			function initMarketImgDiv(){
-				$('#marketImg').html(getMarImgCode());
-			}
-			function initMarketListDiv(){
-				$('#marketList').html(getMarketListCode());
-			}
-		</script>
-		<!-- Global site tag (gtag.js) - Google Analytics -->
+		
+		
+        $(document).ready(function () {
+			
+        });
+		
+		
+			
+	</script>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=G-TKGF4X80CR"></script>
 		<script>
 		  window.dataLayer = window.dataLayer || [];

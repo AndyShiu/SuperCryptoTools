@@ -7,7 +7,7 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
 
-        <title>SuperCryptoTools(beta 1.0)</title>
+        <title>SuperCryptoTools(v 1.2)</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
 		<link href="css/icon.css" rel="stylesheet" />
@@ -64,6 +64,11 @@
                                 <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/feedback.png"/></div>
                                 意見回饋
                             </a>
+							<div class="sb-sidenav-menu-heading">進階功能</div>
+							<a class="nav-link"  href="binanceTradeHis.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size" src="./img/binance.png"/></div>
+                                幣安現貨損益(P&L)
+                            </a>
 							<div class="sb-sidenav-menu-heading">快速連結</div>
 							<a class="nav-link" target="_blank" href="https://www.binance.com/zh-TW">
                                 <div class="sb-nav-link-icon"><img  class="img-fluid icon-size" src="./img/binance.png"/></div>
@@ -102,7 +107,7 @@
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        設定&nbsp;&nbsp;
+                                        設定&nbsp;&nbsp;<button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font>隱藏設定</font></button> 
                                     </div>
                                     <div  class="card-body">
 										<div class="row"> 
@@ -127,7 +132,10 @@
 												</div>
 											</div>
 											<div class="col-12">
-												<button  type="button" class="btn btn-dark" onclick='saveKey()'>儲存</button>
+												<button  type="button" class="btn btn-dark loadBut" onclick='saveKey()'>儲存<font class = 'sssText'></font></button>&nbsp;&nbsp;&nbsp;&nbsp;<font size="1">幣安API-KEY 與 Secret-KEY產生方式 -> <a href="binanceTradeHisTeach.html">點此</a></font>
+											</div>
+											<div class="col-12">
+												
 											</div>
 											<div class="col-12">
 												<hr/>
@@ -137,6 +145,7 @@
 											<div class="col-12">
 												交易歷史紀錄 - 交易對設定
 											</div>
+											
 											<div class="col-12">
 												<div id="symbol-grid"></div>
 											</div>
@@ -162,13 +171,13 @@
                                     </div>
                                     <div class="card-body">
 										<div class="row">
-											<div class="col-4">
+											<div class="col-12 col-lg-12 col-xl-4">
 												<div class="row align-items-center">
-													<div class="col-5 ">
+													<div class="col-4 ">
 														<font>總損益</font>
 													</div>
-													<div class="col-7">
-														<font size='5' id='profit'>0</font> <font size='4'>USDT</font>
+													<div class="col-8">
+														<font size='5' id='profit'>0</font> <font size='3'>USDT</font>
 													</div>
 													
 												</div>
@@ -184,13 +193,13 @@
 												</div>
 												
 											</div>
-											<div class="col-4">
+											<div class="col-12 col-lg-6 col-xl-4">
 												<div class="row align-items-center">
-													<div class="col-5 ">
+													<div class="col-4 ">
 														<font>現貨價值</font>
 													</div>
-													<div class="col-7 ">
-														<font size='5' id='blprofit'>0</font> <font size='4'>USDT</font>
+													<div class="col-8 ">
+														<font size='5' id='blprofit'>0</font> <font size='3'>USDT</font>
 													</div>
 												</div>
 												<div class="row align-items-center">
@@ -204,13 +213,13 @@
 													</div>
 												</div>
 											</div>
-											<div class="col-4">
+											<div class="col-12 col-lg-6 col-xl-4">
 												<div class="row align-items-center">
-													<div class="col-5 ">
+													<div class="col-4 ">
 														<font>交易損益</font>
 													</div>
-													<div class="col-7 ">
-														<font size='5' id='hisprofit'>0</font> <font size='4'>USDT</font>
+													<div class="col-8 ">
+														<font size='5' id='hisprofit'>0</font> <font size='3'>USDT</font>
 													</div>
 												</div>
 												<div class="row align-items-center">
@@ -224,6 +233,12 @@
 													</div>
 												</div>
 											</div>
+											<div class="col-12">
+												<hr/>
+											</div>
+											<div class="col-12 text-center">
+												<font id='lastUpd' size = '2'></font>
+											</div>
 										</div>
 										
 										
@@ -234,7 +249,7 @@
                                 <hr/>
                             </div>
 							<div class="col-12 text-end">
-								<button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font id='hideShowButText'>隱藏設定</font></button> <button type="button" class="btn btn-danger" onclick='loadHis()'>讀取交易紀錄</button>
+								<button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font id='hideShowButText'>隱藏設定</font></button> <button type="button"  class="btn btn-danger loadBut" onclick='loadHis()'>讀取交易紀錄<font class = 'sssText'></font></button>
 							</div>
 							<div class="col-12">
                                 <br/>
@@ -292,11 +307,48 @@
 			initBalanceGrid();
 			
 			countProfit();
+			
+			
+			showNextLoadAllow();
         });
+		
+		function showNextLoadAllow(){
+			global.loadHisTime = JSON.parse(window.localStorage.getItem("loadHisTime"));
+			if(global.loadHisTime != null){
+
+				var now = new Date();
+				var now = now.getTime();
+				
+				if(now<global.loadHisTime){
+					$('.loadBut').prop('disabled', true);
+					//console.log(now);
+					//console.log(global.loadHisTime);
+					
+					var refreshIntervalId = setInterval(function() {
+						now = new Date();
+						now = now.getTime();
+						
+						var sss = (global.loadHisTime - now)/1000;
+						$('.sssText').text('('+Number.parseInt(sss)+'s)');
+						if(sss<1){
+							clearInterval(refreshIntervalId);
+							$('.sssText').text('');
+							$('.loadBut').prop('disabled', false);
+						}
+					}, 1000);
+				}
+				var lastUpd = new Date(global.loadHisTime-180000);
+				$('#lastUpd').text('最後更新時間:'+lastUpd.getFullYear()+'/'+(lastUpd.getMonth()+1)+'/'+lastUpd.getDate()+' '+lastUpd.toLocaleTimeString());
+				
+			}
+		
+		}
 		
 		function getUserBalance(){
 			global.blData = JSON.parse(window.localStorage.getItem("BalanceData"));
-		
+			if(global.blData == null){
+				global.blData = [];
+			}
 		}
 		
 		function initBalanceGrid(){
@@ -496,6 +548,19 @@
 		}
 		
 		function saveKey(){
+			var akey_input = $('#akey_input').val();
+			var skey_input = $('#skey_input').val();
+			if(skey_input.trim() == '' || akey_input.trim() == ''){
+			Swal.fire(
+					  '請輸入資料',
+					  '資API-KEY 或 Secret-KEY 不可為空!',
+					  'error'
+					)
+					
+					return;
+				
+			}
+		
 			window.localStorage.setItem("akey",$('#akey_input').val());	
 			window.localStorage.setItem("skey",$('#skey_input').val());	
 			Swal.fire(
@@ -504,6 +569,7 @@
 					  'success'
 					)
 			getUserKey();
+			loadHis();
 		}
 		
 		function getUserKey(){
@@ -517,6 +583,8 @@
 					  text: '請先設定API-KEY與Secret-KEY',
 					  icon: 'warning'
 					});
+				global.akey = '';
+				global.skey = '';
 			}else{
 				$('#akey_input').val(global.akey);
 				$('#skey_input').val(global.skey);
@@ -563,7 +631,7 @@
 				     //e.preventDefault();
 				  //}else{
 					//window.localStorage.setItem("MarDomData",JSON.stringify($("#market-dominance-grid").data("kendoGrid").dataSource.data()));	
-					//console.log(JSON.parse(JSON.stringify($("#market-dominance-grid").data("kendoGrid").dataSource.data())));
+					////console.log(JSON.parse(JSON.stringify($("#market-dominance-grid").data("kendoGrid").dataSource.data())));
 				  //}
 				  
 				  $("#symbol-grid").data("kendoGrid").dataSource.data().sort(function(a, b) {
@@ -603,7 +671,15 @@
 		
 		
 		function loadHis(){
-			
+			if(global.akey.trim()=='' || global.skey.trim()==''){
+				
+				Swal.fire({
+					  title:'尚未設定',
+					  text: '請先設定API-KEY與Secret-KEY',
+					  icon: 'warning'
+					});
+				return;
+			}
 			var count = 0;
 			var delay = 500;
 			global.hisData = [];
@@ -620,10 +696,10 @@
 								global.hisData.push(data.obj);
 							}
 							
-							console.log(dataLength);
-							console.log(count);
+							//console.log(dataLength);
+							//console.log(count);
 							if(dataLength==(count+1)){
-								console.log(global.hisData);
+								//console.log(global.hisData);
 								window.localStorage.setItem("HisData",JSON.stringify(global.hisData));	
 								
 								var dataSource = new kendo.data.DataSource({
@@ -631,9 +707,12 @@
 								});
 								var grid = $("#grid").data("kendoGrid");
 								grid.setDataSource(dataSource);
-								getUserBalanceByAPI();
-								
 								$.unblockUI();
+								getUserBalanceByAPI();
+								var d = new Date();
+								var n = d.getTime();
+								window.localStorage.setItem("loadHisTime",n+180000);	
+								showNextLoadAllow();
 								//grid.refresh();
 							}
 							count ++;
@@ -651,6 +730,7 @@
 		}
 		
 		function getUserBalanceByAPI(){
+		$.blockUI({ message: '<h1>現貨資料讀取中</h1>' });
 			$.ajax({ 
 				type: "get",  
 				url: remoteIpAddress+'/api/balance/binance?apiKey='+global.akey+'&SecretKey='+global.skey, 
@@ -659,8 +739,7 @@
 					if(data.code=='0'){
 						window.localStorage.setItem("BalanceData",JSON.stringify(data.obj));	
 					}
-					
-					console.log(data);
+					$.unblockUI();
 					getUserBalance();
 					var dataSource = new kendo.data.DataSource({
 								  data: global.blData.detail
@@ -689,8 +768,8 @@
 		function countProfit(){
 			var blData = global.blData.detail;
 			var hisData = global.hisData;
-			console.log(blData);
-			console.log(hisData);
+			//console.log(blData);
+			//console.log(hisData);
 			var hisprofit = new bigDecimal('0');
 			var blprofit = new bigDecimal('0');
 			var profit = new bigDecimal('0');
@@ -726,7 +805,10 @@
 			$('#profit').text(profit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
 			$('#blprofit').text(blprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
 			$('#hisprofit').text(hisprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
-		
+			
+			window.localStorage.setItem("profit",profit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
+			window.localStorage.setItem("blprofit",blprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
+			window.localStorage.setItem("hisprofit",hisprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
 		}
 		
 		
