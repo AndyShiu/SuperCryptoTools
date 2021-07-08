@@ -176,7 +176,7 @@
 											<div class="col-12 col-lg-12 col-xl-4">
 												<div class="row align-items-center">
 													<div class="col-4 ">
-														<font>總損益</font>
+														<font>買賣總損益(P&L)</font>
 													</div>
 													<div class="col-8">
 														<font size='5' id='profit'>0</font> <font size='3'>USDT</font>
@@ -190,7 +190,7 @@
 												</div>
 												<div class="row">
 													<div class="col-12 text-center">
-														<font size = '2'>(總損益 = 現貨價值 + 交易損益)</font>
+														<font size = '2'>(總損益 = 賣出的收益+|((購買數量-賣出數量)*現在幣價)| - 購買成本)</font>
 													</div>
 												</div>
 												
@@ -218,10 +218,10 @@
 											<div class="col-12 col-lg-6 col-xl-4">
 												<div class="row align-items-center">
 													<div class="col-4 ">
-														<font>交易損益</font>
+														<font>購入總成本</font>
 													</div>
 													<div class="col-8 ">
-														<font size='5' id='hisprofit'>0</font> <font size='3'>USDT</font>
+														<font size='5' id='hiscost'>0</font> <font size='3'>USDT</font>
 													</div>
 												</div>
 												<div class="row align-items-center">
@@ -231,7 +231,7 @@
 												</div>
 												<div class="row">
 													<div class="col-12 text-center">
-														<font size = '2'>(交易損益 = 成交收益 - 購入成本)</font>
+														<font size = '2'>(所有交易對購入成本加總)</font>
 													</div>
 												</div>
 											</div>
@@ -529,7 +529,7 @@
 					width: "100px"
                 },{
                     field: "profit",
-                    title: "已實現損益",
+                    title: "買賣損益(P&L)",
 					template:"#=profit# USDT",
 					attributes: {
 					  "class": "table-cell",
@@ -772,7 +772,7 @@
 			var hisData = global.hisData;
 			//console.log(blData);
 			//console.log(hisData);
-			var hisprofit = new bigDecimal('0');
+			var hiscost = new bigDecimal('0');
 			var blprofit = new bigDecimal('0');
 			var profit = new bigDecimal('0');
 			$.each(blData, function(key,value) {
@@ -782,9 +782,11 @@
 			
 			$.each(hisData, function(key,value) {
 				var b = new bigDecimal(value.profit);
-				hisprofit = hisprofit.add(b);
+				profit = profit.add(b);
+				var c = new bigDecimal(value.cost);
+				hiscost = hiscost.add(c);
 			});
-			profit = blprofit.add(hisprofit);
+
 			
 			if(profit.compareTo( new bigDecimal('0'))<0){
 				$('#profit').css('color', 'red');
@@ -798,19 +800,19 @@
 				$('#blprofit').css('color', 'green');
 			}
 			
-			if(hisprofit.compareTo( new bigDecimal('0'))<0){
-				$('#hisprofit').css('color', 'red');
+			if(hiscost.compareTo( new bigDecimal('0'))<0){
+				$('#hiscost').css('color', 'red');
 			}else{
-				$('#hisprofit').css('color', 'green');
+				$('#hiscost').css('color', 'red');
 			}
 			
 			$('#profit').text(profit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
 			$('#blprofit').text(blprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
-			$('#hisprofit').text(hisprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
+			$('#hiscost').text(hiscost.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
 			
 			window.localStorage.setItem("profit",profit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
 			window.localStorage.setItem("blprofit",blprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
-			window.localStorage.setItem("hisprofit",hisprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
+			window.localStorage.setItem("hiscost",hiscost.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
 		}
 		
 		
