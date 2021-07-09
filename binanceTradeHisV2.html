@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+
+        <title>SuperCryptoTools(v 1.2)</title>
+        <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet" />
+        <link href="css/styles.css" rel="stylesheet" />
+		<link href="css/icon.css" rel="stylesheet" />
+		<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.common.min.css" />
+		<!--<link rel="stylesheet" href="https://kendo.cdn.telerik.com/2021.2.616/styles/kendo.default.min.css" />-->
+		<link rel="stylesheet" href="css/kendo.custom.css" />
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/js/all.min.js" crossorigin="anonymous"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://kendo.cdn.telerik.com/2021.2.616/js/kendo.all.min.js"></script>
+		<script src="https://kendo.cdn.telerik.com/2021.2.616/js/messages/kendo.messages.zh-TW.min.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+		<!-- include BlockUI -->
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.blockUI/2.70/jquery.blockUI.min.js"></script>
+		
+		<script src="https://unpkg.com/js-big-decimal@1.3.1/dist/web/js-big-decimal.min.js"></script>
+		<script data-ad-client="ca-pub-2341732219377974" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+		
+    </head>
+    <body class="sb-nav-fixed">
+        <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+            <!-- Navbar Brand-->
+            <a class="navbar-brand ps-3" href="index.html">SuperCryptoTools</a>
+            <!-- Sidebar Toggle-->
+            <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
+            
+            
+            <!-- Navbar-->
+            <ul class="navbar-nav ms-auto ms-md-0 me-3 me-lg-4">
+               
+            </ul>
+        </nav>
+        <div id="layoutSidenav">
+            <div id="layoutSidenav_nav">
+                <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+                    <div class="sb-sidenav-menu">
+                        <div class="nav">
+                            <div class="sb-sidenav-menu-heading">功能</div>
+                            <a class="nav-link" href="index.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/speedometer.png"/></div>
+                                儀表板
+                            </a>
+							
+							<a class="nav-link" href="rates.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/money.png"/></div>
+                                法幣匯率
+                            </a>
+							
+							<a class="nav-link" href="setting.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/settings.png"/></div>
+                                個人化設定
+                            </a>
+							
+							<a class="nav-link" href="feedback.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-background-white" src="./img/feedback.png"/></div>
+                                意見回饋
+                            </a>
+							<div class="sb-sidenav-menu-heading">進階功能</div>
+							<a class="nav-link"  href="binanceTradeHis.html">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size" src="./img/binance.png"/></div>
+                                幣安現貨損益(P&L)
+                            </a>
+							<div class="sb-sidenav-menu-heading">快速連結</div>
+							<a class="nav-link" target="_blank" href="https://www.binance.com/zh-TW">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size" src="./img/binance.png"/></div>
+                                幣安
+                            </a>
+							<a class="nav-link" target="_blank" href="https://ftx.com/">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size" src="./img/ftx.png"/></div>
+                                FTX
+                            </a>
+							<a class="nav-link" target="_blank" href="https://supercforcrypto.firstory.io/">
+                                <div class="sb-nav-link-icon"><img  class="img-fluid icon-size icon-radius" src="./img/superc.jpg"/></div>
+                                <font size ='2'>SuperC - 克洛伊小姐</font>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="sb-sidenav-footer">
+                        <div class="small">資料與圖表來源:</div>
+						<h3>TradingView</h3>               
+                    </div>
+                </nav>
+            </div>
+            <div id="layoutSidenav_content">
+                <main>
+                    <div class="container-fluid px-4">
+                        <h1 class="mt-4">幣安現貨P&L</h1>
+                        <ol class="breadcrumb mb-4">
+                            <li class="breadcrumb-item active">查看幣安現貨歷史成交紀錄與損益</li>
+							
+                        </ol>
+                      
+                        <div id='settingDiv' class="row">
+							<div class="col-12">
+                                <hr/>
+                            </div>
+                            <div class="col-xl-12">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        設定&nbsp;&nbsp;<button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font>隱藏設定</font></button> 
+                                    </div>
+                                    <div  class="card-body">
+										<div class="row"> 
+											 
+											<div class="col-12">
+												幣安API參數設定
+											</div>
+											<div class="col-12">
+												<div class="input-group input-group-sm mb-3">
+												  <div class="input-group-prepend">
+													<span class="input-group-text" id="inputGroup-sizing-sm">API-KEY</span>
+												  </div>
+												  <input type="text" id="akey_input" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+												</div>
+											</div>
+											<div class="col-12">
+												<div class="input-group input-group-sm mb-3">
+												  <div class="input-group-prepend">
+													<span class="input-group-text" id="inputGroup-sizing-sm">Secret-KEY</span>
+												  </div>
+												  <input type="text" id="skey_input" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+												</div>
+											</div>
+											<div class="col-12">
+												<button  type="button" class="btn btn-dark loadBut" onclick='saveKey()'>儲存<font class = 'sssText'></font></button>&nbsp;&nbsp;&nbsp;&nbsp;<font size="1">幣安API-KEY 與 Secret-KEY產生方式 -> <a href="binanceTradeHisTeach.html">點此</a></font>
+											</div>
+											<div class="col-12">
+												
+											</div>
+											<div class="col-12">
+												<hr/>
+											</div>
+										</div>
+										<div class="row">
+											<div class="col-12">
+												交易對本位設定
+											</div>
+											<div class="col-12">	
+												<font color = 'red' size='3'></font>
+											</div>
+											<div class="col-12">
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_USDT"><label class="form-check-label" for="base_USDT"> USDT </label></div>     &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_BUSD"><label class="form-check-label" for="base_BUSD"> BUSD </label></div>     &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_USDC"><label class="form-check-label" for="base_USDC"> USDC </label></div>     &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_USDS"><label class="form-check-label" for="base_USDS"> USDS </label></div>     &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_BTC"><label class="form-check-label" for="base_BTC"> BTC </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_BNB"><label class="form-check-label" for="base_BNB"> BNB </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_ETH"><label class="form-check-label" for="base_ETH"> ETH </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_PAX"><label class="form-check-label" for="base_PAX"> PAX </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_EUR"><label class="form-check-label" for="base_EUR"> EUR </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_USD"><label class="form-check-label" for="base_USD"> USD </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_TRY"><label class="form-check-label" for="base_TRY"> TRY </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_BRL"><label class="form-check-label" for="base_BRL"> BRL </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_GBP"><label class="form-check-label" for="base_GBP"> GBP </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_BIDR"><label class="form-check-label" for="base_BIDR"> BIDR </label></div>     &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_RUB"><label class="form-check-label" for="base_RUB"> RUB </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_BKRW"><label class="form-check-label" for="base_BKRW"> BKRW </label></div>     &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_AUD"><label class="form-check-label" for="base_AUD"> AUD </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_NGN"><label class="form-check-label" for="base_NGN"> NGN </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_DAI"><label class="form-check-label" for="base_DAI"> DAI </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_UAH"><label class="form-check-label" for="base_UAH"> UAH </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_ZAR"><label class="form-check-label" for="base_ZAR"> ZAR </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_IDRT"><label class="form-check-label" for="base_IDRT"> IDRT </label></div>     &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_GYEN"><label class="form-check-label" for="base_GYEN"> GYEN </label></div>     &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_XRP"><label class="form-check-label" for="base_XRP"> XRP </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_TRX"><label class="form-check-label" for="base_TRX"> TRX </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_VAI"><label class="form-check-label" for="base_VAI"> VAI </label></div>        &nbsp;&nbsp;
+												<div class="form-check form-check-inline"><input class="form-check-input" type="checkbox" value="" id="base_BVND"><label class="form-check-label" for="base_BVND"> BVND </label></div>  
+											</div>
+											
+										</div>
+										
+									</div>
+                                </div>
+                            </div>
+                           
+                        </div>
+						
+						
+						
+						
+                        <div class="row">
+						
+							<div class="col-12">
+								<div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-area me-1"></i>
+                                        P&L 損益總覽
+                                    </div>
+                                    <div class="card-body">
+										<div class="row">
+											<div class="col-12 col-lg-12 col-xl-4">
+												<div class="row align-items-center">
+													<div class="col-4 ">
+														<font>總損益</font>
+													</div>
+													<div class="col-8">
+														<font size='5' id='profit'>0</font> <font size='3'>USDT</font>
+													</div>
+													
+												</div>
+												<div class="row align-items-center">
+													<div class="col-12">
+														<hr/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12 text-center">
+														<font size = '2'>(總損益 = 現貨價值 + 交易損益)</font>
+													</div>
+												</div>
+												
+											</div>
+											<div class="col-12 col-lg-6 col-xl-4">
+												<div class="row align-items-center">
+													<div class="col-4 ">
+														<font>現貨價值</font>
+													</div>
+													<div class="col-8 ">
+														<font size='5' id='blprofit'>0</font> <font size='3'>USDT</font>
+													</div>
+												</div>
+												<div class="row align-items-center">
+													<div class="col-12">
+														<hr/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12 text-center">
+														<font size = '2'>(現貨價值 = 幣安帳戶內所有現貨之價值)</font>
+													</div>
+												</div>
+											</div>
+											<div class="col-12 col-lg-6 col-xl-4">
+												<div class="row align-items-center">
+													<div class="col-4 ">
+														<font>交易損益</font>
+													</div>
+													<div class="col-8 ">
+														<font size='5' id='hisprofit'>0</font> <font size='3'>USDT</font>
+													</div>
+												</div>
+												<div class="row align-items-center">
+													<div class="col-12">
+														<hr/>
+													</div>
+												</div>
+												<div class="row">
+													<div class="col-12 text-center">
+														<font size = '2'>(交易損益 = 成交收益 - 購入成本)</font>
+													</div>
+												</div>
+											</div>
+											<div class="col-12">
+												<hr/>
+											</div>
+											<div class="col-12 text-center">
+												<font id='lastUpd' size = '2'></font>
+											</div>
+										</div>
+										
+										
+									</div>
+                                </div>
+							</div>
+                            <div class="col-12">
+                                <hr/>
+                            </div>
+							<div class="col-12 text-end">
+								<button id='hideShowBut' type="button" class="btn btn-dark" onclick='hideShowSet()'><font id='hideShowButText'>隱藏設定</font></button> <button type="button"  class="btn btn-danger loadBut" onclick='loadHis()'>讀取交易紀錄<font class = 'sssText'></font></button>
+							</div>
+							<div class="col-12">
+                                <br/>
+                            </div>
+							<div class="col-12">
+                                <font size = '4'>現貨</font>
+                            </div>
+							<div class="col-12">
+								<div id='balance-grid'></div>
+							</div>
+							
+							<div class="col-12">
+                                <br/>
+                            </div>
+							<div class="col-12">
+                                <font size = '4'>交易歷史紀錄</font>
+                            </div>
+							<div class="col-12">
+								<div id='grid'></div>
+							</div>
+							
+                        </div>
+						
+                    </div>
+                </main>
+                <footer class="py-4 bg-light mt-auto">
+                    <div class="container-fluid px-4">
+                        <div class="d-flex align-items-center justify-content-between small">
+                            <div class="text-muted">Copyright &copy; AndyShiu 2021 ‧ <a href="https://github.com/AndyShiu/SuperCryptoTools">Github</a> </div>
+                            
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </div>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="js/scripts.js"></script>
+		<script src="js/data.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+		<script>
+		
+		var global = [];
+
+        $(document).ready(function () {
+			global.isSetShow=true;
+			
+			getSymbolData();
+			initSymbolGrid();
+			hideShowSet();
+			
+			getUserKey();
+			getHis();
+			initGrid();
+			getUserBalance();
+			initBalanceGrid();
+			
+			countProfit();
+			
+			
+			showNextLoadAllow();
+        });
+		
+		function showNextLoadAllow(){
+			global.loadHisTime = JSON.parse(window.localStorage.getItem("loadHisTime"));
+			if(global.loadHisTime != null){
+
+				var now = new Date();
+				var now = now.getTime();
+				
+				if(now<global.loadHisTime){
+					$('.loadBut').prop('disabled', true);
+					//console.log(now);
+					//console.log(global.loadHisTime);
+					
+					var refreshIntervalId = setInterval(function() {
+						now = new Date();
+						now = now.getTime();
+						
+						var sss = (global.loadHisTime - now)/1000;
+						$('.sssText').text('('+Number.parseInt(sss)+'s)');
+						if(sss<1){
+							clearInterval(refreshIntervalId);
+							$('.sssText').text('');
+							$('.loadBut').prop('disabled', false);
+						}
+					}, 1000);
+				}
+				var lastUpd = new Date(global.loadHisTime-180000);
+				$('#lastUpd').text('最後更新時間:'+lastUpd.getFullYear()+'/'+(lastUpd.getMonth()+1)+'/'+lastUpd.getDate()+' '+lastUpd.toLocaleTimeString());
+				
+			}
+		
+		}
+		
+		function getUserBalance(){
+			global.blData = JSON.parse(window.localStorage.getItem("BalanceData"));
+			if(global.blData == null){
+				global.blData = [];
+			}
+		}
+		
+		function initBalanceGrid(){
+			global.blGrid = 
+			$("#balance-grid").kendoGrid({
+                dataSource: {
+                    type: "json",
+                    data: global.blData.detail,
+                    pageSize: 20
+                    
+                },
+				
+				
+				
+                pageable: {
+                    
+                },
+                columns: [
+					{
+						field: "asset",
+						title: "幣別",
+						width: "100px"
+					},{
+						field: "price",
+						template:"#=price# USDT",
+						attributes: {
+						  "class": "table-cell",
+						  style: "text-align: right;"
+						},
+						title: "單價",
+						width: "100px"
+					},{
+						field: "free",
+						title: "可運用",
+						attributes: {
+						  "class": "table-cell",
+						  style: "text-align: right;"
+						},
+						width: "100px"
+					},{
+						field: "locked",
+						attributes: {
+						  "class": "table-cell",
+						  style: "text-align: right;"
+						},
+						title: "鎖定",
+						width: "100px"
+					},{
+						field: "totalPrice",
+						template:"#=totalPrice# USDT",
+						attributes: {
+						  "class": "table-cell",
+						  style: "text-align: right;"
+						},
+						title: "總價",
+						width: "100px"
+					},{ 
+						field: "updDateTime", 
+						title:"最後更新時間", 
+						width: "100px" 
+					}
+				]
+            });
+		
+		}
+		
+		function getHis(){
+			global.hisData = JSON.parse(window.localStorage.getItem("HisData"));
+		
+		}
+		function initGrid(){
+			global.dataGrid = 
+			$("#grid").kendoGrid({
+                dataSource: {
+                    type: "json",
+                    data: global.hisData,
+                    pageSize: 20
+                    
+                },
+				resizable: true,
+				detailTemplate: '歷史紀錄: <div class="grid"></div>',
+				detailInit: function(e) {
+					e.detailRow.find(".grid").kendoGrid({
+						dataSource: 
+						{
+							type: "json",
+							data: e.data.detail,
+							pageSize: 10
+							
+						},						
+						scrollable: false,
+						sortable: true,
+						resizable: true,
+						pageable: {
+                    
+						},
+						columns: [
+							{ 
+								field: "dateTimeStr", 
+								title:"交易日期", 
+								width: "150px" 
+							},
+							{ 
+								field: "isBuyer", 
+								title: "買/賣",
+								template:"#if(isBuyer){#<font color='green'>買</font>#}else{#<font color='red'>賣</font>#}#", 
+								width: "50px" 
+							},
+							{ 
+								field: "price", 
+								title:"單價",
+								template:"#=price# USDT",
+								attributes: {
+								  "class": "table-cell",
+								  style: "text-align: right;"
+								},								
+								width: "200px" 
+							},
+							{ 
+								field: "qty", 
+								title:"數量", 
+								attributes: {
+								  "class": "table-cell",
+								  style: "text-align: right;"
+								},
+								width: "200px" 
+							},
+							{ 
+								field: "quoteQty", 
+								title: "成交金額", 
+								template:"#=quoteQty# USDT",
+								attributes: {
+								  "class": "table-cell",
+								  style: "text-align: right;"
+								},
+								width: "300px" 
+							},
+							{ 
+								field: "commission", 
+								title: "手續費", 
+								template:"#=commission# #=commissionAsset#",
+								attributes: {
+								  "class": "table-cell",
+								  style: "text-align: right;"
+								},
+								width: "200px" 
+							},
+							
+						]
+					});
+				  },
+                pageable: {
+                    
+                },
+                columns: [{
+                    field: "symbol",
+                    title: "交易對",
+					width: "100px"
+                },{
+                    field: "cost",
+                    title: "購買成本",
+					template:"#=cost# USDT",
+					attributes: {
+					  "class": "table-cell",
+					  style: "text-align: right;"
+					},
+					width: "100px"
+                },{
+                    field: "income",
+                    title: "已成交收入",
+					template:"#=income# USDT",
+					attributes: {
+					  "class": "table-cell",
+					  style: "text-align: right;"
+					},
+					width: "100px"
+                },{
+                    field: "profit",
+                    title: "已實現損益",
+					template:"#=profit# USDT",
+					attributes: {
+					  "class": "table-cell",
+					  style: "text-align: right;"
+					},
+					width: "100px"
+                },{
+				    field: "dataSize",
+                    title: "交易資料數量",
+					attributes: {
+					  "class": "table-cell",
+					  style: "text-align: right;"
+					},
+					width: "100px"
+				
+				}]
+            });
+		}
+		
+		function saveKey(){
+			var akey_input = $('#akey_input').val();
+			var skey_input = $('#skey_input').val();
+			if(skey_input.trim() == '' || akey_input.trim() == ''){
+			Swal.fire(
+					  '請輸入資料',
+					  '資API-KEY 或 Secret-KEY 不可為空!',
+					  'error'
+					)
+					
+					return;
+				
+			}
+		
+			window.localStorage.setItem("akey",$('#akey_input').val());	
+			window.localStorage.setItem("skey",$('#skey_input').val());	
+			Swal.fire(
+					  '儲存成功!',
+					  '資料儲存成功!',
+					  'success'
+					)
+			getUserKey();
+			loadHis();
+		}
+		
+		function getUserKey(){
+			global.akey = window.localStorage.getItem("akey");
+			global.skey = window.localStorage.getItem("skey");
+			
+			if(global.akey == null || global.skey == null){
+				hideShowSet();
+				Swal.fire({
+					  title:'尚未設定',
+					  text: '請先設定API-KEY與Secret-KEY',
+					  icon: 'warning'
+					});
+				global.akey = '';
+				global.skey = '';
+			}else{
+				$('#akey_input').val(global.akey);
+				$('#skey_input').val(global.skey);
+			}
+		}
+		
+		function getSymbolData(){
+			global.symbolsData = JSON.parse(window.localStorage.getItem("SymbolsData"));
+			
+			if(global.symbolsData==null){
+				global.symbolsData = symbolsData;
+			}
+		}
+		
+		function initSymbolGrid(){
+			global.sdGrid = 
+			$("#symbol-grid").kendoGrid({
+                dataSource: {
+                    type: "json",
+                    data: global.symbolsData,
+                    pageSize: 20,
+					schema: {
+                        model: {
+                            id: "proName",
+                            fields: {
+                                order: { type: "number", validation: { required: true } },
+                                description: { validation: { required: true } },
+                                proName: { validation: { required: true} } 
+							}
+                        }
+                    }
+                    
+                },
+				toolbar: [	
+							{ name: "create" },
+							{ name: "save" },
+							{ name: "cancel" }
+						 ],
+                
+				editable: true,
+				confirmation: false,
+			    saveChanges: function(e) {
+				  //if (!confirm("Are you sure you want to save all changes?")) {
+				     //e.preventDefault();
+				  //}else{
+					//window.localStorage.setItem("MarDomData",JSON.stringify($("#market-dominance-grid").data("kendoGrid").dataSource.data()));	
+					////console.log(JSON.parse(JSON.stringify($("#market-dominance-grid").data("kendoGrid").dataSource.data())));
+				  //}
+				  
+				  $("#symbol-grid").data("kendoGrid").dataSource.data().sort(function(a, b) {
+						if (true) {
+							return (a['order'] > b['order']) ? 1 : ((a['order'] < b['order']) ? -1 : 0);
+						} else {
+							return (b['order'] > a['order']) ? 1 : ((b['order'] < a['order']) ? -1 : 0);
+						}
+					});
+				  
+				  window.localStorage.setItem("SymbolsData",JSON.stringify($("#symbol-grid").data("kendoGrid").dataSource.data()));	
+				  getSymbolData();
+				  Swal.fire(
+					  '儲存成功!',
+					  '資料儲存成功!',
+					  'success'
+					)
+					hideShowSet();
+			    },
+				
+                pageable: {
+                    
+                },
+                columns: [{
+                    field: "order",
+                    title: "順序",
+					width: "25px"
+                },{
+                    field: "symbol",
+                    title: "交易對",
+					width: "100px"
+                },{ command: ["destroy"], title: "&nbsp;", width: "55px" }]
+            });
+			
+			
+		}
+		
+		
+		function loadHis(){
+			if(global.akey.trim()=='' || global.skey.trim()==''){
+				
+				Swal.fire({
+					  title:'尚未設定',
+					  text: '請先設定API-KEY與Secret-KEY',
+					  icon: 'warning'
+					});
+				return;
+			}
+			var count = 0;
+			var delay = 500;
+			global.hisData = [];
+			var dataLength =global.symbolsData.length;
+			$.blockUI({ message: '<h1>資料讀取中(<font id="pcount">0</font>/'+dataLength+')</h1>' });
+			$.each(global.symbolsData, function(key,value) {
+				setTimeout(function(){
+					$.ajax({ 
+						type: "get",  
+						url: remoteIpAddress+'/api/pAndl/binance?apiKey='+global.akey+'&SecretKey='+global.skey+'&symbol='+value.symbol, 
+						async: false,
+						success: function(data){
+							if(data.code=='0'){
+								global.hisData.push(data.obj);
+							}
+							
+							//console.log(dataLength);
+							//console.log(count);
+							if(dataLength==(count+1)){
+								//console.log(global.hisData);
+								window.localStorage.setItem("HisData",JSON.stringify(global.hisData));	
+								
+								var dataSource = new kendo.data.DataSource({
+								  data: global.hisData
+								});
+								var grid = $("#grid").data("kendoGrid");
+								grid.setDataSource(dataSource);
+								$.unblockUI();
+								getUserBalanceByAPI();
+								var d = new Date();
+								var n = d.getTime();
+								window.localStorage.setItem("loadHisTime",n+180000);	
+								showNextLoadAllow();
+								//grid.refresh();
+							}
+							count ++;
+							$('#pcount').text(''+count);
+						}
+					});
+				},delay);
+				delay += 500;
+				
+				
+				
+			});
+			
+			
+		}
+		
+		function getUserBalanceByAPI(){
+		$.blockUI({ message: '<h1>現貨資料讀取中</h1>' });
+			$.ajax({ 
+				type: "get",  
+				url: remoteIpAddress+'/api/balance/binance?apiKey='+global.akey+'&SecretKey='+global.skey, 
+				async: false,
+				success: function(data){
+					if(data.code=='0'){
+						window.localStorage.setItem("BalanceData",JSON.stringify(data.obj));	
+					}
+					$.unblockUI();
+					getUserBalance();
+					var dataSource = new kendo.data.DataSource({
+								  data: global.blData.detail
+								});
+					var grid = $("#balance-grid").data("kendoGrid");
+								grid.setDataSource(dataSource);
+								
+					countProfit();
+				}
+			});
+		}
+		
+		function hideShowSet(){
+			if(global.isSetShow){
+				$('#settingDiv').hide();
+				global.isSetShow = false;
+				$('#hideShowButText').text('顯示設定');
+			}else{
+				$('#settingDiv').show();
+				global.isSetShow = true;
+				$('#hideShowButText').text('隱藏設定');
+			}
+			
+		}
+		
+		function countProfit(){
+			var blData = global.blData.detail;
+			var hisData = global.hisData;
+			//console.log(blData);
+			//console.log(hisData);
+			var hisprofit = new bigDecimal('0');
+			var blprofit = new bigDecimal('0');
+			var profit = new bigDecimal('0');
+			$.each(blData, function(key,value) {
+				var b = new bigDecimal(value.totalPrice);
+				blprofit = blprofit.add(b);
+			});
+			
+			$.each(hisData, function(key,value) {
+				var b = new bigDecimal(value.profit);
+				hisprofit = hisprofit.add(b);
+			});
+			profit = blprofit.add(hisprofit);
+			
+			if(profit.compareTo( new bigDecimal('0'))<0){
+				$('#profit').css('color', 'red');
+			}else{
+				$('#profit').css('color', 'green');
+			}
+			
+			if(blprofit.compareTo( new bigDecimal('0'))<0){
+				$('#blprofit').css('color', 'red');
+			}else{
+				$('#blprofit').css('color', 'green');
+			}
+			
+			if(hisprofit.compareTo( new bigDecimal('0'))<0){
+				$('#hisprofit').css('color', 'red');
+			}else{
+				$('#hisprofit').css('color', 'green');
+			}
+			
+			$('#profit').text(profit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
+			$('#blprofit').text(blprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
+			$('#hisprofit').text(hisprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());
+			
+			window.localStorage.setItem("profit",profit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
+			window.localStorage.setItem("blprofit",blprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
+			window.localStorage.setItem("hisprofit",hisprofit.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
+		}
+		
+		
+		
+			
+	</script>
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=G-TKGF4X80CR"></script>
+		<script>
+		  window.dataLayer = window.dataLayer || [];
+		  function gtag(){dataLayer.push(arguments);}
+		  gtag('js', new Date());
+
+		  gtag('config', 'G-TKGF4X80CR');
+		</script>
+    </body>
+</html>
