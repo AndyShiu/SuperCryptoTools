@@ -141,12 +141,52 @@
 												<hr/>
 											</div>
 										</div>
+									
 										<div class="row">
 											<div class="col-12">
-												交易歷史紀錄 - 交易對設定
+												<font size='5'>歷史紀錄查詢交易對設定</font>
+											</div>
+										</div>
+										
+										<div class="row">
+											<div class="col-12">
+												方法一：所有交易對歷史紀錄 - 排程查詢所有交易對紀錄處理
+											</div>
+											<div class="col-12">
+												<font color = 'green' size='3'>建議第一次使用的朋友，可以先透過後端排程幫你找尋所有曾經在幣安交易過的交易對，日後再透過手動新增後續的交易對設定。</font>
+											</div>
+											<div class="col-12">
+												<font color = 'green' size='3'>批次處理完畢後，會自動將您有交易紀錄的交易對新增至手動清單。</font>
+											</div>
+											<div class="col-12">
+												<font color = 'red' size='2'>因幣安交易所API有使用頻率限制，且幣安所有交易對數量過於龐大，故此功能為批次主機處理請求，並於處理完畢後更新至本頁面。</font>
 											</div>
 											<div class="col-12">	
-												<font color = 'red' size='3'>目前版本請先自行增加要查看的歷史交易對，未來版本再來看看怎麼讓你們用得更方便唷>.^</font>
+												<font color = 'red' size='2'>(處理時間依照當下請求人數而定，通常約在1個小時內可處理完成)；每次使用後，三天內不可再使用。</font>
+											</div>
+											<div class="col-12">
+												<br/>
+											</div>
+											<div class="col-12">
+												<button  type="button" class="btn btn-success bbbLoadBut" onclick='batchHisKey()'>送出處理請求<font class = 'bbbText2'></font><font class = 'bbbText'></font></button>
+											</div>
+											<div class="col-12">
+												<font id='queue_message'></font>
+											</div>
+										</div>
+										
+										<div class="row">
+											<div class="col-12">
+												<hr/>
+											</div>
+										</div>
+										
+										<div class="row">
+											<div class="col-12">
+												方法二：自訂交易對歷史紀錄 - 交易對設定
+											</div>
+											<div class="col-12">	
+												<font color = 'red' size='3'>您可以在這邊自行添加要查詢的歷史紀錄交易對</font>
 											</div>
 											<div class="col-12">
 												<div id="symbol-grid"></div>
@@ -312,7 +352,147 @@
 			
 			
 			showNextLoadAllow();
+			checkBatch();
         });
+		
+		function checkBatch(){
+			global.batchHisStatus = window.localStorage.getItem("batchHisStatus");
+			
+			if(global.batchHisStatus=='w'){
+				checkBatchHis();
+				pollingBatchHis();
+			}
+			
+			global.loadBatchHisTime = JSON.parse(window.localStorage.getItem("loadBatchHisTime"));
+			var now = new Date();
+			var now = now.getTime();
+				console.log(global.loadBatchHisTime);
+				console.log(now);
+			if(now<global.loadBatchHisTime){
+				$('.bbbLoadBut').prop('disabled', true);
+					console.log(now);
+					console.log(global.loadBatchHisTime);
+					
+					var refreshIntervalId = setInterval(function() {
+						now = new Date();
+						now = now.getTime();
+						
+						var sss = (global.loadBatchHisTime - now)/1000;
+						$('.bbbText').text('('+(sss+'').toHHMMSS()+')');
+						if(sss<1){
+							clearInterval(refreshIntervalId);
+							$('.bbbText').text('');
+							$('.bbbLoadBut').prop('disabled', false);
+						}
+					}, 1000);
+			}
+		
+		}
+		
+		function pollingBatchHis(){
+			global.refreshIntervalId = setInterval(function() {
+				checkBatchHis();
+				console.log("pollingBatchHis");
+			}, 600000);
+		}
+		
+		function batchHisKey(){
+			$.blockUI({ message: '<h1>請求處理中...</h1>' });
+			$.ajax({ 
+				type: "put",  
+				url: remoteIpAddress+'/api/pAndl/binance/batchHis?apiKey='+global.akey+'&SecretKey='+global.skey, 
+				async: false,
+				success: function(data){
+					if(data.code=='0'){
+						window.localStorage.setItem("batchHisId",data.obj);	
+						window.localStorage.setItem("batchHisStatus",'w');	
+						
+						var d = new Date();
+						var n = d.getTime();
+						window.localStorage.setItem("loadBatchHisTime",n+259200000);
+						
+					}else if(data.code=='-2'){
+						Swal.fire(
+						  '您的請求已加入排程',
+						  '請稍後，您的請求正在排隊處理中...',
+						  'warning'
+						)
+					}
+					
+					checkBatchHis();
+					
+					$.unblockUI();
+					
+				}
+			});
+		}
+		
+		function checkBatchHis(){
+		var batchHisId = window.localStorage.getItem("batchHisId");
+			$.ajax({ 
+				type: "get",  
+				url: remoteIpAddress+'/api/pAndl/binance/checkBatchHis?apiKey='+global.akey+'&SecretKey='+global.skey+'&id='+batchHisId, 
+				async: false,
+				success: function(data){
+					if(data.code=='0'){
+					
+						$('#queue_message').text(data.obj.message);
+						if(data.obj.status=='f'){
+							window.localStorage.setItem("batchHisStatus",'f');	
+							setSymnolList(data);
+							window.localStorage.setItem("HisData",JSON.stringify(data.obj.object));	
+							var dataSource = new kendo.data.DataSource({
+							  data: global.hisData
+							});
+							var grid = $("#grid").data("kendoGrid");
+							grid.setDataSource(dataSource);
+							getUserBalanceByAPI();
+							var d = new Date();
+							var n = d.getTime();
+							window.localStorage.setItem("loadHisTime",n+180000);	
+							showNextLoadAllow();
+							if(global.refreshIntervalId !=null){
+								clearInterval(global.refreshIntervalId);
+							}
+							
+						}else{
+							$('.bbbText2').text('[請求處理中]');
+						
+						}
+					}else if(data.code=='-3'){
+						var d = new Date();
+						var n = d.getTime();
+						window.localStorage.setItem("batchHisStatus",'');
+						window.localStorage.setItem("loadHisTime",n);
+					}
+					
+					
+					
+					
+					
+				}
+			});
+		
+		}
+		
+		
+		function setSymnolList(data){	
+		
+			global.symbolsData = [];
+			var index = 0;
+			$.each(data.obj.object, function(key,value) {
+				var obj = {'order':index,'symbol':value.symbol};
+				global.symbolsData.push(obj);
+				index++;
+			});
+			window.localStorage.setItem("SymbolsData",JSON.stringify(global.symbolsData));	
+			var dataSource = new kendo.data.DataSource({
+				data: global.symbolsData
+			});
+			var grid = $("#symbol-grid").data("kendoGrid");
+			grid.setDataSource(dataSource);
+			
+		}
 		
 		function showNextLoadAllow(){
 			global.loadHisTime = JSON.parse(window.localStorage.getItem("loadHisTime"));
@@ -331,7 +511,7 @@
 						now = now.getTime();
 						
 						var sss = (global.loadHisTime - now)/1000;
-						$('.sssText').text('('+Number.parseInt(sss)+'s)');
+						$('.sssText').text('('+(sss+'').toHHMMSS()+')');
 						if(sss<1){
 							clearInterval(refreshIntervalId);
 							$('.sssText').text('');
@@ -760,9 +940,11 @@
 				global.isSetShow = false;
 				$('#hideShowButText').text('顯示設定');
 			}else{
+			
 				$('#settingDiv').show();
 				global.isSetShow = true;
 				$('#hideShowButText').text('隱藏設定');
+				$("html, body").animate({ scrollTop: 0 }, "slow");
 			}
 			
 		}
@@ -776,14 +958,14 @@
 			var blprofit = new bigDecimal('0');
 			var profit = new bigDecimal('0');
 			$.each(blData, function(key,value) {
-				var b = new bigDecimal(value.totalPrice);
+				var b = new bigDecimal(value.totalPrice.replace(/,/g,""));
 				blprofit = blprofit.add(b);
 			});
 			
 			$.each(hisData, function(key,value) {
-				var b = new bigDecimal(value.profit);
+				var b = new bigDecimal(value.profit.replace(/,/g,""));
 				profit = profit.add(b);
-				var c = new bigDecimal(value.cost);
+				var c = new bigDecimal(value.cost.replace(/,/g,""));
 				hiscost = hiscost.add(c);
 			});
 
@@ -815,7 +997,30 @@
 			window.localStorage.setItem("hiscost",hiscost.round(3, bigDecimal.RoundingModes.HALF_UP).getPrettyValue());	
 		}
 		
-		
+		String.prototype.toHHMMSS = function () {
+			var sec_num = parseInt(this, 10); // don't forget the second param
+			var hours   = Math.floor(sec_num / 3600);
+			var minutes = Math.floor((sec_num - (hours * 3600)) / 60);
+			var seconds = sec_num - (hours * 3600) - (minutes * 60);
+
+			if (hours   < 10) {hours   = "0"+hours;}
+			if (minutes < 10) {minutes = "0"+minutes;}
+			if (seconds < 10) {seconds = "0"+seconds;}
+			var res = '';
+			if(hours!=0){
+				res = res + hours+'時';
+			}
+			
+			if(minutes!=0){
+				res = res +minutes+'分';
+			}
+			
+			if(seconds != 0){
+				res = res +seconds+'秒';
+			}
+			
+			return res;
+		}
 		
 			
 	</script>
