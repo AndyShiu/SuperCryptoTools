@@ -371,12 +371,10 @@
 			global.loadBatchHisTime = JSON.parse(window.localStorage.getItem("loadBatchHisTime"));
 			var now = new Date();
 			var now = now.getTime();
-				console.log(global.loadBatchHisTime);
-				console.log(now);
+				
 			if(now<global.loadBatchHisTime){
 				$('.bbbLoadBut').prop('disabled', true);
-					console.log(now);
-					console.log(global.loadBatchHisTime);
+					
 					
 					var refreshIntervalId = setInterval(function() {
 						now = new Date();
@@ -398,7 +396,7 @@
 			global.refreshIntervalId = setInterval(function() {
 				checkBatchHis();
 				console.log("pollingBatchHis");
-			}, 600000);
+			}, 90000);
 		}
 		
 		function batchHisKey(){
