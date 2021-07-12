@@ -167,8 +167,11 @@
 											<div class="col-12">
 												<br/>
 											</div>
-											<div class="col-12">
+											<div class="col-12 col-lg-6 col-xl-6">
 												<button  type="button" class="btn btn-success bbbLoadBut" onclick='batchHisKey()'>送出處理請求<font class = 'bbbText2'></font><font class = 'bbbText'></font></button>
+											</div>
+											<div class="col-12 col-lg-6 col-xl-6">
+												<font id = 'batchLastInfo' color = 'red' size='2'></font>
 											</div>
 											<div class="col-12">
 												<font id='queue_message'></font>
@@ -361,6 +364,8 @@
 			if(global.batchHisStatus=='w'){
 				checkBatchHis();
 				pollingBatchHis();
+				
+				
 			}
 			
 			global.loadBatchHisTime = JSON.parse(window.localStorage.getItem("loadBatchHisTime"));
@@ -397,6 +402,19 @@
 		}
 		
 		function batchHisKey(){
+			var akey_input = $('#akey_input').val();
+			var skey_input = $('#skey_input').val();
+			if(skey_input.trim() == '' || akey_input.trim() == ''){
+			Swal.fire(
+					  '請輸入資料',
+					  '資API-KEY 或 Secret-KEY 不可為空!',
+					  'error'
+					)
+					
+					return;
+				
+			}
+		
 			$.blockUI({ message: '<h1>請求處理中...</h1>' });
 			$.ajax({ 
 				type: "put",  
@@ -454,7 +472,23 @@
 								clearInterval(global.refreshIntervalId);
 							}
 							
+							$('#batchLastInfo').text('(您的最後一次請求處理狀態 : 已完成!)');
+							
+							Swal.fire(
+							  '全部歷史交易紀錄處理完畢',
+							  '您的請求已處理完畢！交易對設定也已為您更新！',
+							  'success'
+							)
+							
 						}else{
+							if(data.obj.status=='w'){
+								$('#batchLastInfo').text('(您的最後一次請求處理狀態 : 等候中!)');
+							} else if(data.obj.status=='p'){
+								$('#batchLastInfo').text('(您的最後一次請求處理狀態 : 執行中!)');
+							}
+						
+							
+							
 							$('.bbbText2').text('[請求處理中]');
 						
 						}
@@ -463,10 +497,12 @@
 						var n = d.getTime();
 						window.localStorage.setItem("batchHisStatus",'');
 						window.localStorage.setItem("loadHisTime",n);
+						
+						
 					}
 					
 					
-					checkBatch();
+					
 					
 					
 				}
