@@ -378,7 +378,7 @@
 						now = now.getTime();
 						
 						var sss = (global.loadBatchHisTime - now)/1000;
-						$('.bbbText').text('('+(sss+'').toHHMMSS()+')');
+						$('.bbbText').text('(下次可再執行：'+(sss+'').toHHMMSS()+'後)');
 						if(sss<1){
 							clearInterval(refreshIntervalId);
 							$('.bbbText').text('');
