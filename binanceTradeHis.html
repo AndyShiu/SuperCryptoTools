@@ -432,7 +432,6 @@
 			$.ajax({ 
 				type: "get",  
 				url: remoteIpAddress+'/api/pAndl/binance/checkBatchHis?apiKey='+global.akey+'&SecretKey='+global.skey+'&id='+batchHisId, 
-				async: false,
 				success: function(data){
 					if(data.code=='0'){
 					
@@ -916,7 +915,6 @@
 			$.ajax({ 
 				type: "get",  
 				url: remoteIpAddress+'/api/balance/binance?apiKey='+global.akey+'&SecretKey='+global.skey, 
-				async: false,
 				success: function(data){
 					if(data.code=='0'){
 						window.localStorage.setItem("BalanceData",JSON.stringify(data.obj));	
